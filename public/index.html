@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AssetFlow Pro - Enterprise Office Asset Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+
+  <!-- AUTHENTICATION & SIGN IN / SIGN UP PORTAL -->
+  <div id="authPortal" class="auth-portal-wrapper">
+    <div class="auth-glow-circle circle-1"></div>
+    <div class="auth-glow-circle circle-2"></div>
+    
+    <div class="auth-card">
+      <!-- Portal Brand Header -->
+      <div class="auth-header">
+        <div class="auth-brand-badge">
+          <div class="auth-brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+          </div>
+          <span class="auth-version-tag">Enterprise Portal v1.0</span>
+        </div>
+        <h1 class="auth-title">AssetFlow Pro</h1>
+        <p class="auth-subtitle">Sign in to manage company inventory, depreciation & allocations</p>
+      </div>
+
+      <!-- Segmented Switcher Tabs -->
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab-btn active" id="tabBtnSignIn" onclick="App.switchAuthTab('signin')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+          Sign In
+        </button>
+        <button type="button" class="auth-tab-btn" id="tabBtnSignUp" onclick="App.switchAuthTab('signup')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="8.5" cy="7" r="4"/>
+            <line x1="20" y1="8" x2="20" y2="14"/>
+            <line x1="23" y1="11" x2="17" y2="11"/>
+          </svg>
+          Sign Up / Register
+        </button>
+      </div>
+
+      <!-- Alert Box -->
+      <div id="authAlert" class="auth-alert" style="display: none;"></div>
+
+      <!-- Form 1: Sign In -->
+      <form id="signInForm" class="auth-form" onsubmit="App.handleSignIn(event)">
+        <div class="auth-form-group">
+          <label class="auth-label" for="signInIdentifier">Work Email or Username</label>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <input type="text" id="signInIdentifier" class="auth-input" placeholder="e.g. admin@company.com or admin" required autocomplete="username">
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <div class="auth-label-row">
+            <label class="auth-label" for="signInPassword">Password</label>
+            <a href="javascript:void(0)" class="auth-forgot-link" onclick="App.showForgotInfo()">Forgot Password?</a>
+          </div>
+          <div class="auth-input-wrap">
+            <span class="auth-input-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <input type="password" id="signInPassword" class="auth-input" placeholder="Enter your password" required autocomplete="current-password">
+            <button type="button" class="auth-toggle-pwd" onclick="App.togglePasswordVisibility('signInPassword', this)" title="Toggle visibility">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="auth-submit-btn" id="signInSubmitBtn">
+          <span class="btn-text">Sign In to Dashboard</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+
+        <!-- Quick 1-Click Demo Logins -->
+        <div class="auth-demo-divider">
+          <span>Or Quick 1-Click Demo Login</span>
+        </div>
+        <div class="auth-demo-grid">
+          <button type="button" class="demo-login-btn admin" onclick="App.demoLogin('admin@company.com', 'admin123')">
+            <div class="demo-btn-icon">⚡</div>
+            <div class="demo-btn-details">
+              <strong>Admin Demo</strong>
+              <span>Full Access • IT Administrator</span>
+            </div>
+          </button>
+          <button type="button" class="demo-login-btn manager" onclick="App.demoLogin('sarah.chen@company.com', 'user123')">
+            <div class="demo-btn-icon">💼</div>
+            <div class="demo-btn-details">
+              <strong>Manager Demo</strong>
+              <span>Asset Manager • Sarah Chen</span>
+            </div>
+          </button>
+        </div>
+      </form>
+
+      <!-- Form 2: Sign Up / Register -->
+      <form id="signUpForm" class="auth-form" style="display: none;" onsubmit="App.handleSignUp(event)">
+        <div class="auth-form-row">
+          <div class="auth-form-group">
+            <label class="auth-label" for="signUpFullName">Full Name <span class="req">*</span></label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input type="text" id="signUpFullName" class="auth-input" placeholder="e.g. Marcus Vance" required>
+            </div>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="signUpRole">System Role <span class="req">*</span></label>
+            <select id="signUpRole" class="auth-input auth-select" required>
+              <option value="IT Administrator">IT Administrator</option>
+              <option value="Asset Manager" selected>Asset Manager</option>
+              <option value="Logistics Officer">Logistics Officer</option>
+              <option value="Staff Member">Staff Member</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="auth-form-row">
+          <div class="auth-form-group">
+            <label class="auth-label" for="signUpEmail">Work Email Address <span class="req">*</span></label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <input type="email" id="signUpEmail" class="auth-input" placeholder="name@company.com" required>
+            </div>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="signUpUsername">Username <span class="req">*</span></label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>
+              </span>
+              <input type="text" id="signUpUsername" class="auth-input" placeholder="e.g. mvance" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-form-row">
+          <div class="auth-form-group">
+            <label class="auth-label" for="signUpPassword">Password (min 6 chars) <span class="req">*</span></label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input type="password" id="signUpPassword" class="auth-input" placeholder="At least 6 characters" minlength="6" required>
+              <button type="button" class="auth-toggle-pwd" onclick="App.togglePasswordVisibility('signUpPassword', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="signUpConfirmPassword">Confirm Password <span class="req">*</span></label>
+            <div class="auth-input-wrap">
+              <span class="auth-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </span>
+              <input type="password" id="signUpConfirmPassword" class="auth-input" placeholder="Repeat password" minlength="6" required>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="auth-submit-btn" id="signUpSubmitBtn">
+          <span class="btn-text">Create Account & Enter Portal</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        </button>
+
+        <div class="auth-toggle-footer">
+          <span>Already registered with an account?</span>
+          <a href="javascript:void(0)" onclick="App.switchAuthTab('signin')">Sign In here</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="app-container" id="appContainer" style="display: none;">
+
+    <!-- Left Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>AssetFlow Pro</h1>
+          <span>Office Asset Manager</span>
+        </div>
+      </div>
+
+      <ul class="nav-menu">
+        <li class="nav-section-title">Core Management</li>
+        <li>
+          <a class="nav-item active" data-tab="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-tab="assets">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            Asset Inventory
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-tab="allocations">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            Allocations & Return
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-tab="maintenance">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Maintenance & Repairs
+          </a>
+        </li>
+
+        <li class="nav-section-title">Valuation & Operations</li>
+        <li>
+          <a class="nav-item" data-tab="depreciation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Depreciation Engine
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-tab="labels">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="3" height="3"/><rect x="14" y="7" width="3" height="3"/><rect x="7" y="14" width="3" height="3"/><rect x="14" y="14" width="3" height="3"/></svg>
+            QR Sticker Station
+          </a>
+        </li>
+        <li>
+          <a class="nav-item" data-tab="audit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Audit Trail
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-widget">
+          <div class="avatar" id="sidebarUserAvatar">AD</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUserName">IT Administrator</div>
+            <div class="user-role" id="sidebarUserRole">System Online</div>
+          </div>
+          <button type="button" class="sidebar-logout-btn" onclick="App.handleLogout()" title="Sign Out">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-title-wrap">
+          <h2 id="pageHeaderTitle">Executive Overview</h2>
+          <p id="pageHeaderSubtitle">Live asset valuation, allocations, and lifecycle status</p>
+        </div>
+        <div class="header-actions">
+          <div class="header-user-pill" id="headerUserPill">
+            <div class="header-user-avatar" id="headerUserAvatar">AD</div>
+            <div class="header-user-meta">
+              <span class="header-user-name" id="headerUserName">Admin</span>
+              <span class="header-user-role" id="headerUserRole">Administrator</span>
+            </div>
+            <button class="header-signout-btn" onclick="App.handleLogout()" title="Sign Out of AssetFlow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              <span>Sign Out</span>
+            </button>
+          </div>
+          <a href="/api/reports/export-csv" class="btn btn-secondary" title="Export Asset Register to CSV">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </a>
+          <button class="btn btn-primary" onclick="App.openAddAssetModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Register Asset
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <div class="content-body">
+
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-view active">
+          <!-- KPI Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card blue">
+              <div class="stat-info">
+                <span>Total Assets</span>
+                <h3 id="kpiTotalAssets">--</h3>
+                <p id="kpiAvailableCount">-- in stock</p>
+              </div>
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+            </div>
+
+            <div class="stat-card emerald">
+              <div class="stat-info">
+                <span>Purchase Capital</span>
+                <h3 id="kpiTotalCost">$0.00</h3>
+                <p>Gross original acquisition</p>
+              </div>
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+            </div>
+
+            <div class="stat-card indigo">
+              <div class="stat-info">
+                <span>Net Book Value</span>
+                <h3 id="kpiBookValue">$0.00</h3>
+                <p>Depreciated carrying value</p>
+              </div>
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+            </div>
+
+            <div class="stat-card amber">
+              <div class="stat-info">
+                <span>Allocations & Service</span>
+                <h3 id="kpiAssignedCount">--</h3>
+                <p id="kpiMaintenanceCount">-- in maintenance</p>
+              </div>
+              <div class="stat-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts & Analytics Row -->
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3>Asset Category Distribution</h3>
+                <span>Hardware portfolio mix</span>
+              </div>
+              <div class="card-body" style="display: flex; align-items: center; justify-content: center;">
+                <canvas id="categoryDonutCanvas"></canvas>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3>Department Allocation</h3>
+                <span>Deployed equipment</span>
+              </div>
+              <div class="card-body" id="departmentBarList">
+                <!-- Injected via charts.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row: Warranty Alerts + Activity Trail -->
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3>Warranty Expiration Watch (Next 90 Days)</h3>
+                <span>Proactive refresh cycle</span>
+              </div>
+              <div class="card-body" id="warrantyAlertList">
+                <!-- Injected via app.js -->
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3>Recent System Activity</h3>
+                <span>Real-time audit log</span>
+              </div>
+              <div class="card-body" id="recentActivityFeed">
+                <!-- Injected via app.js -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: ASSET INVENTORY -->
+        <section id="tab-assets" class="tab-view">
+          <div class="toolbar-wrap">
+            <div class="filter-group">
+              <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="assetSearchInput" class="search-input" placeholder="Search tag, serial, model, employee...">
+              </div>
+              <select id="assetCategoryFilter" class="select-filter">
+                <option value="ALL">All Categories</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <div class="pill-group">
+                <button class="pill-btn asset-status-pill active" data-status="ALL">All Assets</button>
+                <button class="pill-btn asset-status-pill" data-status="Available">Available</button>
+                <button class="pill-btn asset-status-pill" data-status="Assigned">Assigned</button>
+                <button class="pill-btn asset-status-pill" data-status="In Maintenance">Maintenance</button>
+              </div>
+              <button class="btn btn-secondary" onclick="window.print()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Print Register
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Tag / Serial</th>
+                  <th>Asset Name & Model</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Cost / Net Book Value</th>
+                  <th>Assigned Holder</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="assetsTableBody">
+                <!-- Dynamically loaded -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 3: ALLOCATIONS & CHECKOUT -->
+        <section id="tab-allocations" class="tab-view">
+          <div class="toolbar-wrap">
+            <div>
+              <h3 style="font-size: 1.05rem; font-weight: 700;">Employee Asset Allocation Register</h3>
+              <p style="font-size: 0.8rem; color: #64748b;">Complete history of equipment check-outs and check-ins</p>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Asset Tag & Name</th>
+                  <th>Assigned Employee</th>
+                  <th>Checkout Date</th>
+                  <th>Expected Return</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="allocationsTableBody">
+                <!-- Injected via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 4: MAINTENANCE & REPAIRS -->
+        <section id="tab-maintenance" class="tab-view">
+          <div class="toolbar-wrap">
+            <div>
+              <h3 style="font-size: 1.05rem; font-weight: 700;">Service & Maintenance Tickets</h3>
+              <p style="font-size: 0.8rem; color: #64748b;">Track equipment repairs, warranty claims, and vendor servicing</p>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Ticket #</th>
+                  <th>Asset</th>
+                  <th>Issue Description</th>
+                  <th>Priority</th>
+                  <th>Status</th>
+                  <th>Repair Cost</th>
+                  <th style="text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="maintenanceTableBody">
+                <!-- Injected via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 5: DEPRECIATION ENGINE -->
+        <section id="tab-depreciation" class="tab-view">
+          <div class="toolbar-wrap">
+            <div>
+              <h3 style="font-size: 1.05rem; font-weight: 700;">GAAP / IAS 16 Straight-Line Valuation</h3>
+              <p style="font-size: 0.8rem; color: #64748b;">Automated financial amortization and real-time carrying book value</p>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Asset Tag & Name</th>
+                  <th>Category</th>
+                  <th>Acquisition Date</th>
+                  <th>Gross Cost</th>
+                  <th>Annual Dep.</th>
+                  <th>Accumulated Dep.</th>
+                  <th>Carrying Book Value</th>
+                </tr>
+              </thead>
+              <tbody id="depreciationTableBody">
+                <!-- Injected via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TAB 6: QR STICKER STATION -->
+        <section id="tab-labels" class="tab-view">
+          <div class="toolbar-wrap">
+            <div>
+              <h3 style="font-size: 1.05rem; font-weight: 700;">Printable Asset QR Identification Tags</h3>
+              <p style="font-size: 0.8rem; color: #64748b;">Formatted for standard adhesive barcode/QR label printers</p>
+            </div>
+            <button class="btn btn-primary" onclick="window.print()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Print Sticker Sheets
+            </button>
+          </div>
+
+          <div id="labelsGridContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px;">
+            <!-- Injected via app.js -->
+          </div>
+        </section>
+
+        <!-- TAB 7: AUDIT TRAIL -->
+        <section id="tab-audit" class="tab-view">
+          <div class="toolbar-wrap">
+            <div>
+              <h3 style="font-size: 1.05rem; font-weight: 700;">System Audit & Compliance Log</h3>
+              <p style="font-size: 0.8rem; color: #64748b;">Tamper-evident chronological record of inventory transactions</p>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Action</th>
+                  <th>Authorized User</th>
+                  <th>Transaction Details</th>
+                </tr>
+              </thead>
+              <tbody id="auditTableBody">
+                <!-- Injected via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- Modal: Add Asset -->
+  <div class="modal-overlay" id="modalAddAsset">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Register New Office Asset</h3>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <form id="addAssetForm">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Asset Name <span class="req">*</span></label>
+              <input type="text" name="name" class="form-control" placeholder="e.g. Dell XPS 15 9530" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category <span class="req">*</span></label>
+              <select name="category_id" id="assetCategorySelect" class="form-control" required></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Manufacturer</label>
+              <input type="text" name="manufacturer" class="form-control" placeholder="e.g. Dell, Apple, Lenovo">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Model / Part Number</label>
+              <input type="text" name="model" class="form-control" placeholder="e.g. Precision 5680">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Serial Number</label>
+              <input type="text" name="serial_number" class="form-control" placeholder="Auto-generated if blank">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Purchase Date <span class="req">*</span></label>
+              <input type="date" name="purchase_date" class="form-control" required value="2024-06-01">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Purchase Cost ($) <span class="req">*</span></label>
+              <input type="number" step="0.01" name="purchase_cost" class="form-control" placeholder="1999.00" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Salvage Value ($)</label>
+              <input type="number" step="0.01" name="salvage_value" class="form-control" placeholder="200.00" value="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Useful Life (Years)</label>
+              <input type="number" name="useful_life_years" class="form-control" value="4" min="1" max="25">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Warranty Expiry Date</label>
+              <input type="date" name="warranty_expiry" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Physical Location</label>
+              <select name="location_id" id="assetLocationSelect" class="form-control"></select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Notes & Specifications</label>
+              <textarea name="notes" class="form-control" placeholder="RAM, storage, display specifications..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Save to Inventory</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Asset Details & QR Tag -->
+  <div class="modal-overlay" id="modalAssetDetail">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="detailAssetName">Asset Details</h3>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; gap: 24px; margin-bottom: 20px; align-items: center;">
+          <div class="qr-sticker-card" style="max-width: 180px; padding: 12px;">
+            <div style="font-size: 0.65rem; color: #64748b; font-weight: 700;">SCAN / AUDIT</div>
+            <img id="detailQrImage" src="" alt="Asset QR Code" style="width: 130px; height: 130px; margin: 8px 0;">
+            <div id="detailAssetTag" class="qr-sticker-tag" style="font-size: 0.9rem;"></div>
+          </div>
+          <div style="flex: 1; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px;">
+            <div><span style="color: #64748b;">Status:</span> <span id="detailStatus"></span></div>
+            <div><span style="color: #64748b;">Category:</span> <strong id="detailCategory"></strong></div>
+            <div><span style="color: #64748b;">Serial:</span> <span id="detailSerial" style="font-family: monospace;"></span></div>
+            <div><span style="color: #64748b;">Model:</span> <span id="detailModel"></span></div>
+            <div><span style="color: #64748b;">Location:</span> <span id="detailLocation"></span></div>
+            <div><span style="color: #64748b;">Current Assignee:</span> <strong id="detailAssignedTo"></strong></div>
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; border-radius: 10px; padding: 16px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; color: #0f172a;">Financials (Straight-Line GAAP)</h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; font-size: 0.8rem;">
+            <div>Original Cost: <strong id="detailPurchaseCost">$0.00</strong></div>
+            <div>Carrying Book Value: <strong id="detailBookValue" style="color: #059669;">$0.00</strong></div>
+            <div>Accumulated Dep: <strong id="detailAccDepreciation">$0.00</strong></div>
+          </div>
+        </div>
+
+        <h4 style="font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; color: #0f172a;">Allocation History</h4>
+        <div id="detailAllocHistory" style="max-height: 140px; overflow-y: auto;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-modal-close>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Checkout / Assign Asset -->
+  <div class="modal-overlay" id="modalCheckout">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3>Assign Equipment to Employee</h3>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <form id="checkoutForm">
+        <input type="hidden" name="asset_id" id="checkoutAssetId">
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Asset</label>
+            <div id="checkoutAssetDisplay" style="font-weight: 700; color: #4f46e5; padding: 8px 12px; background: #f1f5f9; border-radius: 8px;"></div>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Assign To Employee <span class="req">*</span></label>
+            <select name="employee_id" id="checkoutEmployeeSelect" class="form-control" required></select>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Expected Return Date</label>
+            <input type="date" name="expected_return_date" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Checkout Notes</label>
+            <textarea name="checkout_notes" class="form-control" placeholder="Accessories included, condition notes..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Complete Assignment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Return / Checkin Asset -->
+  <div class="modal-overlay" id="modalReturn">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3>Check-in / Return Asset to Inventory</h3>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <form id="returnForm">
+        <input type="hidden" name="allocation_id" id="returnAllocationId">
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Asset & Current Holder</label>
+            <div id="returnAssetDisplay" style="font-weight: 700; color: #0f172a; padding: 8px 12px; background: #f1f5f9; border-radius: 8px;"></div>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Inspection Condition <span class="req">*</span></label>
+            <select name="return_condition" class="form-control" required>
+              <option value="New">New / Mint</option>
+              <option value="Excellent" selected>Excellent</option>
+              <option value="Good">Good (Normal Wear)</option>
+              <option value="Fair">Fair (Scratches/Blemishes)</option>
+              <option value="Damaged">Damaged (Needs Repair)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Return Notes</label>
+            <textarea name="return_notes" class="form-control" placeholder="Inspection findings, missing accessories..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm Return</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Log Maintenance Ticket -->
+  <div class="modal-overlay" id="modalMaintenance">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3>Log Equipment Repair Ticket</h3>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <form id="maintenanceForm">
+        <input type="hidden" name="asset_id" id="maintenanceAssetId">
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Asset</label>
+            <div id="maintenanceAssetDisplay" style="font-weight: 700; color: #f59e0b; padding: 8px 12px; background: #fffbeb; border-radius: 8px;"></div>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Issue Description <span class="req">*</span></label>
+            <textarea name="issue_description" class="form-control" required placeholder="Describe malfunction, hardware failure or required servicing..."></textarea>
+          </div>
+          <div class="form-grid" style="margin-bottom: 14px;">
+            <div class="form-group">
+              <label class="form-label">Priority</label>
+              <select name="priority" class="form-control">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Assigned Vendor / Tech</label>
+              <input type="text" name="assigned_vendor" class="form-control" placeholder="e.g. Dell ProSupport, AppleCare, Internal IT" value="Internal IT">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estimated Cost ($)</label>
+            <input type="number" step="0.01" name="cost" class="form-control" value="0.00">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Ticket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Resolve Maintenance Ticket -->
+  <div class="modal-overlay" id="modalResolveMaintenance">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3>Resolve Maintenance Ticket</h3>
+        <button class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <form id="resolveMaintenanceForm">
+        <input type="hidden" name="ticket_id" id="resolveTicketId">
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Ticket</label>
+            <div id="resolveTicketNumberDisplay" style="font-weight: 700; color: #4f46e5; padding: 8px 12px; background: #f1f5f9; border-radius: 8px;"></div>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Ticket Status <span class="req">*</span></label>
+            <select name="status" class="form-control">
+              <option value="Completed" selected>Completed / Repaired</option>
+              <option value="In Progress">In Progress (Parts Ordered)</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Actual Incurred Cost ($)</label>
+            <input type="number" step="0.01" name="cost" id="resolveCost" class="form-control">
+          </div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Resolution Notes</label>
+            <textarea name="resolution_notes" class="form-control" placeholder="Components replaced, diagnostics performed..."></textarea>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" name="return_to_available" id="returnToAvailableCheck" checked>
+            <label for="returnToAvailableCheck" style="font-size: 0.85rem; color: #334155; cursor: pointer;">
+              Return asset to "Available" inventory status
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Resolution</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/charts.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  asset-manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: office_asset_management
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      # Persistent SQLite database storage
+      - asset_data:/app/data
+      # Persistent uploaded receipts and hardware images
+      - asset_uploads:/app/public/uploads
+
+volumes:
+  asset_data:
+    driver: local
+  asset_uploads:
+    driver: local

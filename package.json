@@ -1,0 +1,32 @@
+{
+  "name": "office-asset-management",
+  "version": "1.0.0",
+  "description": "Professional Enterprise Office Asset Management System with Live Depreciation & QR Tracking",
+  "main": "server.js",
+ 
+"scripts": {
+  "start": "node server.js",
+  "dev": "node --watch server.js",
+  "test": "node --test test/*.test.js",
+  "seed": "node -e \"require('./src/db/seed').seedDatabase()\""
+},
+
+  "engines": {
+    "node": "22.x"
+  },
+  "keywords": [
+    "asset-management",
+    "office-it",
+    "inventory",
+    "depreciation",
+    "software-engineering"
+  ],
+  "author": "Engineering Team",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "qrcode": "^1.5.4"
+  }
+}

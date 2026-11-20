@@ -2,7 +2,13 @@
   "$schema": "https://vercel.sh",
   "functions": {
     "api/index.js": {
-      "includeFiles": "{data,src}/**"
+      "includeFiles": "data/**"
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
+    }
+  ]
 }

@@ -7,7 +7,7 @@ const multer = require('multer');
 const { db, initSchema } = require('./src/db/database');
 const { seedDatabase } = require('./src/db/seed');
 
-initSchema();
+// initSchema();
 seedDatabase();
 
 const app = express();

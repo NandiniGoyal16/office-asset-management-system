@@ -77,6 +77,26 @@ router.get('/', (req, res) => {
   }
 });
 
+// Dropdown Helper Routes (MUST be placed above /:id)
+router.get('/meta/categories', (req, res) => {
+  try {
+    const data = db.prepare('SELECT * FROM categories ORDER BY name ASC').all();
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.get('/meta/locations', (req, res) => {
+  try {
+    const data = db.prepare('SELECT * FROM locations ORDER BY building, floor ASC').all();
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+
 // GET /api/assets/:id - Asset details with full history & QR
 router.get('/:id', async (req, res) => {
   try {

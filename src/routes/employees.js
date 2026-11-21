@@ -64,7 +64,7 @@ router.post('/', (req, res) => {
 });
 
 // Dropdown Helper Routes
-router.get('/meta/departments', (req, res) => {
+router.get('/departments', (req, res) => {
   const data = db.prepare('SELECT * FROM departments ORDER BY name ASC').all();
   res.json({ success: true, data });
 });

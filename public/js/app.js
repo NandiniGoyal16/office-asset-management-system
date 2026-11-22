@@ -641,7 +641,7 @@ const App = {
 
   async loadMaintenance() {
     try {
-      const res = await API.getMaintenance();
+      const res = await API.getMaintenanceRecords();
       const tickets = res.data || [];
       const tbody = document.getElementById('maintenanceTableBody');
       if (!tbody) return;

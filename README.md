@@ -10,6 +10,11 @@
 
 ---
 
+## View The Deployed Project here:
+[Office Asset Managememt System](https://office-asset-management-system-ten.vercel.app/)
+
+---
+
 ## 🌟 Key Features
 
 - **Authentication & Sign-In Portal:** Secure entry gateway before dashboard access with PBKDF2 cryptographic hashing, role-based profiles (`IT Administrator`, `Asset Manager`, `Logistics Officer`, `Staff Member`), session tokens, and instant 1-click demo logins.

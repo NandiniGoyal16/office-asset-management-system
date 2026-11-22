@@ -25,9 +25,12 @@ const App = {
   },
 
   // Authentication State & Session Check
+  // Authentication State & Session Check
   async checkAuth() {
     const token = localStorage.getItem('assetflow_token');
-    if (!token) {
+    if (!token || token === 'undefined' || token === 'null') {
+      localStorage.removeItem('assetflow_token');
+      localStorage.removeItem('assetflow_user');
       this.showAuthPortal();
       return false;
     }
@@ -39,18 +42,16 @@ const App = {
         this.updateUserUI(res.user);
         this.showApp();
         return true;
-      } else {
-        this.showAuthPortal();
-        return false;
       }
-    } catch (err) {
-      console.warn('Session verification failed:', err);
-      localStorage.removeItem('assetflow_token');
-      localStorage.removeItem('assetflow_user');
+      
       this.showAuthPortal();
+      return false;
+    } catch (err) {
+      // API.request() already clears localStorage and calls showAuthPortal() on 401
       return false;
     }
   },
+
 
   showAuthPortal(message = '') {
     const portal = document.getElementById('authPortal');

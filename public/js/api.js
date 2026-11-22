@@ -5,6 +5,7 @@
 
 const API = {
   // Generic Fetch Wrapper
+    // Generic Fetch Wrapper
   async request(endpoint, options = {}) {
     const url = `/api${endpoint}`;
     const defaultHeaders = {
@@ -12,9 +13,9 @@ const API = {
       'Accept': 'application/json'
     };
 
-    // Inject active session Bearer token if available
+    // Inject active session Bearer token if valid
     const token = localStorage.getItem('assetflow_token');
-    if (token) {
+    if (token && token !== 'undefined' && token !== 'null') {
       defaultHeaders['Authorization'] = `Bearer ${token}`;
     }
 
@@ -36,7 +37,9 @@ const API = {
         if (window.App && typeof window.App.showAuthPortal === 'function') {
           window.App.showAuthPortal('Your session has expired. Please sign in again.');
         }
-        throw new Error(data.error || 'Session expired. Please sign in again.');
+        const authErr = new Error(data.error || 'Session expired. Please sign in again.');
+        authErr.isAuthExpired = true;
+        throw authErr;
       }
 
       if (!response.ok || data.success === false) {
@@ -44,10 +47,14 @@ const API = {
       }
       return data;
     } catch (err) {
-      console.error(`API Error on [${options.method || 'GET'} ${url}]:`, err);
+      // Avoid noisy console errors for expected initial session expiration checks
+      if (!(err.isAuthExpired && endpoint === '/auth/me')) {
+        console.error(`API Error on [${options.method || 'GET'} ${url}]:`, err);
+      }
       throw err;
     }
   },
+
 
   // Authentication Endpoints
   async login(credentials) {

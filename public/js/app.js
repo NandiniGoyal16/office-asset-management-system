@@ -859,7 +859,8 @@ const App = {
 
       this.openModal('modalAssetDetail');
     } catch (err) {
-      this.showToast('Failed to load asset details', 'error');
+      console.error('Failed to load asset details:', err);
+      this.showToast(err.message || 'Failed to load asset details', 'error');
     }
   },
 
